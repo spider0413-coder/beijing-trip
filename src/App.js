@@ -623,6 +623,16 @@ const ExpenseTracker = ({ font }) => {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Define fixed fonts for this section to prevent layout break on toggle
+  const staticFont = {
+    xs: 'text-xs',
+    sm: 'text-sm',
+    base: 'text-base',
+    lg: 'text-lg',
+    xl: 'text-xl',
+    '2xl': 'text-2xl',
+  };
+
   // 1. Initialize Auth
   useEffect(() => {
     const initAuth = async () => {
@@ -756,9 +766,9 @@ const ExpenseTracker = ({ font }) => {
         <div className="absolute right-[-20%] bottom-[-40%] w-64 h-64 bg-gray-800 rounded-full blur-3xl opacity-50"></div>
       </div>
 
-      {/* Input Area */}
+      {/* Input Area - Uses staticFont to remain compact */}
       <div className="space-y-6">
-        <h3 className={`font-serif ${font.xl} font-bold text-gray-900 ml-2 flex items-center gap-2`}>
+        <h3 className={`font-serif ${staticFont.xl} font-bold text-gray-900 ml-2 flex items-center gap-2`}>
           {editingId ? <><Edit2 size={20} /> 編輯消費</> : "新增消費"}
         </h3>
         <div className={`bg-white p-6 rounded-3xl shadow-lg shadow-gray-100 border transition-colors flex flex-col gap-4 ${editingId ? 'border-red-100 bg-red-50/20' : 'border-white'}`}>
@@ -767,7 +777,7 @@ const ExpenseTracker = ({ font }) => {
            <div className="flex gap-4">
              <div className="flex-1 relative">
                 <select 
-                  className={`w-full bg-gray-50 border-0 rounded-xl px-5 py-4 text-gray-800 ${font.base} focus:bg-white transition-all outline-none appearance-none font-medium`}
+                  className={`w-full bg-gray-50 border-0 rounded-xl px-5 py-4 text-gray-800 ${staticFont.base} focus:bg-white transition-all outline-none appearance-none font-medium`}
                   value={selectedDay}
                   onChange={(e) => setSelectedDay(e.target.value)}
                 >
@@ -781,7 +791,7 @@ const ExpenseTracker = ({ font }) => {
              </div>
              <div className="w-28 relative">
                 <select 
-                  className={`w-full bg-gray-50 border-0 rounded-xl px-4 py-4 ${font.base} font-bold text-gray-600 outline-none appearance-none text-center`}
+                  className={`w-full bg-gray-50 border-0 rounded-xl px-4 py-4 ${staticFont.base} font-bold text-gray-600 outline-none appearance-none text-center`}
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value)}
                 >
@@ -795,7 +805,7 @@ const ExpenseTracker = ({ font }) => {
            <input 
               type="text" 
               placeholder="消費項目 (如: 打車)" 
-              className={`w-full bg-gray-50 border-0 rounded-xl px-5 py-4 text-gray-800 ${font.base} focus:bg-white transition-all outline-none`}
+              className={`w-full bg-gray-50 border-0 rounded-xl px-5 py-4 text-gray-800 ${staticFont.base} focus:bg-white transition-all outline-none`}
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
             />
@@ -805,23 +815,23 @@ const ExpenseTracker = ({ font }) => {
              <input 
               type="number" 
               placeholder="金額" 
-              className={`flex-1 bg-gray-50 border-0 rounded-xl px-5 py-4 text-gray-800 ${font.base} focus:bg-white transition-all outline-none font-medium`}
+              className={`flex-1 bg-gray-50 border-0 rounded-xl px-5 py-4 text-gray-800 ${staticFont.base} focus:bg-white transition-all outline-none font-medium`}
               value={newAmount}
               onChange={(e) => setNewAmount(e.target.value)}
             />
             {editingId && (
               <button 
                 onClick={resetForm}
-                className={`bg-gray-200 text-gray-600 px-5 rounded-xl font-bold ${font.base} hover:bg-gray-300 transition-colors flex items-center justify-center`}
+                className={`bg-gray-200 text-gray-600 px-5 rounded-xl font-bold ${staticFont.base} hover:bg-gray-300 transition-colors flex items-center justify-center`}
               >
                 <RotateCcw size={22} />
               </button>
             )}
             <button 
               onClick={handleSave}
-              className={`${editingId ? 'bg-red-700 hover:bg-red-800' : 'bg-gray-900 hover:bg-black'} text-white px-8 rounded-xl font-bold ${font.base} transition-colors flex items-center justify-center min-w-[3.5rem] shadow-md`}
+              className={`${editingId ? 'bg-red-700 hover:bg-red-800' : 'bg-gray-900 hover:bg-black'} text-white w-12 h-12 rounded-xl font-bold ${staticFont.base} transition-colors flex items-center justify-center shadow-md shrink-0`}
             >
-              {editingId ? <Save size={22} /> : <Plus size={24} />}
+              {editingId ? <Save size={20} /> : <Plus size={24} />}
             </button>
            </div>
         </div>
@@ -934,6 +944,7 @@ export default function BeijingTravelApp() {
   const [isLargeFont, setIsLargeFont] = useState(false); // Default to Small (Compact)
 
   // Define dynamic font classes based on state
+  // Modified to be smaller by default as requested
   const font = useMemo(() => isLargeFont ? {
     xs: 'text-sm',
     sm: 'text-base',
@@ -943,15 +954,15 @@ export default function BeijingTravelApp() {
     '2xl': 'text-3xl',
     '3xl': 'text-4xl',
     '4xl': 'text-5xl',
-    '5xl': 'text-5xl', // Cap large font at 5xl for flight code
+    '5xl': 'text-5xl', // Cap large font
     '6xl': 'text-7xl',
   } : {
     xs: 'text-[10px]',
     sm: 'text-xs',
-    base: 'text-sm',
-    lg: 'text-base',
-    xl: 'text-lg',
-    '2xl': 'text-xl',
+    base: 'text-sm', // Reduced from text-base
+    lg: 'text-base', // Reduced from text-lg
+    xl: 'text-lg',   // Reduced from text-xl
+    '2xl': 'text-xl', // Reduced from text-2xl
     '3xl': 'text-2xl',
     '4xl': 'text-3xl',
     '5xl': 'text-4xl',
@@ -1115,41 +1126,41 @@ export default function BeijingTravelApp() {
       </main>
 
       {/* Tab Bar - Floating Pill */}
-      <nav className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-xl rounded-full shadow-2xl shadow-gray-200/50 border border-white/50 flex items-center z-40 px-8 py-5 gap-8">
+      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-xl rounded-full shadow-2xl shadow-gray-200/50 border border-white/50 flex items-center z-40 px-6 py-3 gap-6">
          <button 
            onClick={() => setActiveTab('itinerary')}
            className={`relative transition-all duration-300 ${activeTab === 'itinerary' ? 'text-red-800 scale-110' : 'text-gray-300 hover:text-gray-500'}`}
          >
-            <Calendar size={28} strokeWidth={activeTab === 'itinerary' ? 2.5 : 2} />
-            {activeTab === 'itinerary' && <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-red-800 rounded-full"></div>}
+            <Calendar size={24} strokeWidth={activeTab === 'itinerary' ? 2.5 : 2} />
+            {activeTab === 'itinerary' && <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-red-800 rounded-full"></div>}
          </button>
          <button 
            onClick={() => setActiveTab('dining')}
            className={`relative transition-all duration-300 ${activeTab === 'dining' ? 'text-red-800 scale-110' : 'text-gray-300 hover:text-gray-500'}`}
          >
-            <Utensils size={28} strokeWidth={activeTab === 'dining' ? 2.5 : 2} />
-            {activeTab === 'dining' && <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-red-800 rounded-full"></div>}
+            <Utensils size={24} strokeWidth={activeTab === 'dining' ? 2.5 : 2} />
+            {activeTab === 'dining' && <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-red-800 rounded-full"></div>}
          </button>
          <button 
            onClick={() => setActiveTab('bookings')}
            className={`relative transition-all duration-300 ${activeTab === 'bookings' ? 'text-red-800 scale-110' : 'text-gray-300 hover:text-gray-500'}`}
          >
-            <Ticket size={28} strokeWidth={activeTab === 'bookings' ? 2.5 : 2} />
-            {activeTab === 'bookings' && <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-red-800 rounded-full"></div>}
+            <Ticket size={24} strokeWidth={activeTab === 'bookings' ? 2.5 : 2} />
+            {activeTab === 'bookings' && <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-red-800 rounded-full"></div>}
          </button>
          <button 
            onClick={() => setActiveTab('expenses')}
            className={`relative transition-all duration-300 ${activeTab === 'expenses' ? 'text-red-800 scale-110' : 'text-gray-300 hover:text-gray-500'}`}
          >
-            <Wallet size={28} strokeWidth={activeTab === 'expenses' ? 2.5 : 2} />
-            {activeTab === 'expenses' && <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-red-800 rounded-full"></div>}
+            <Wallet size={24} strokeWidth={activeTab === 'expenses' ? 2.5 : 2} />
+            {activeTab === 'expenses' && <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-red-800 rounded-full"></div>}
          </button>
          <button 
            onClick={() => setActiveTab('info')}
            className={`relative transition-all duration-300 ${activeTab === 'info' ? 'text-red-800 scale-110' : 'text-gray-300 hover:text-gray-500'}`}
          >
-            <Info size={28} strokeWidth={activeTab === 'info' ? 2.5 : 2} />
-            {activeTab === 'info' && <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-red-800 rounded-full"></div>}
+            <Info size={24} strokeWidth={activeTab === 'info' ? 2.5 : 2} />
+            {activeTab === 'info' && <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-red-800 rounded-full"></div>}
          </button>
       </nav>
 
