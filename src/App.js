@@ -34,7 +34,7 @@ import {
   AlertTriangle, 
   Briefcase, 
   Loader2,
-  Type // Added for font size toggle
+  Type 
 } from 'lucide-react';
 
 // --- Firebase Imports ---
@@ -416,7 +416,7 @@ const DetailModal = ({ item, onClose, font }) => {
   );
 };
 
-const BoardingPass = ({ flight, font }) => (
+const BoardingPass = ({ flight, font, isLargeFont }) => (
   <div className="bg-white rounded-[1.5rem] shadow-lg shadow-gray-200/50 border border-gray-100 overflow-hidden mb-8 relative group hover:shadow-xl transition-shadow duration-300">
     {/* Ink Splatter Decoration */}
     <div className="absolute top-[-20px] right-[-20px] opacity-[0.03] pointer-events-none">
@@ -440,10 +440,11 @@ const BoardingPass = ({ flight, font }) => (
       
       <div className="flex justify-between items-center mb-6">
         <div>
-           <div className={`${font['5xl']} font-serif font-bold text-gray-900`}>{flight.from}</div>
+           {/* Prevent overlap in large font mode by capping size */}
+           <div className={`${isLargeFont ? 'text-4xl' : font['5xl']} font-serif font-bold text-gray-900`}>{flight.from}</div>
            <div className={`${font.sm} text-gray-400 mt-2 tracking-widest uppercase`}>{flight.fromCity}</div>
         </div>
-        <div className="flex flex-col items-center flex-1 px-8">
+        <div className="flex flex-col items-center flex-1 px-4"> {/* Reduced padding for space */}
            {/* Flight Path Line */}
            <div className="w-full h-0.5 bg-gray-200 relative flex items-center justify-center">
              <div className="bg-white px-3">
@@ -451,10 +452,10 @@ const BoardingPass = ({ flight, font }) => (
                 <Plane size={20} className="rotate-45 text-gray-300" />
              </div>
            </div>
-           <div className={`${font.xs} text-gray-400 mt-2 font-serif italic`}>{flight.duration || 'Direct'}</div>
+           <div className={`${font.xs} text-gray-400 mt-2 font-serif italic text-center`}>{flight.duration || 'Direct'}</div>
         </div>
         <div className="text-right">
-           <div className={`${font['5xl']} font-serif font-bold text-gray-900`}>{flight.to}</div>
+           <div className={`${isLargeFont ? 'text-4xl' : font['5xl']} font-serif font-bold text-gray-900`}>{flight.to}</div>
            <div className={`${font.sm} text-gray-400 mt-2 tracking-widest uppercase`}>{flight.toCity}</div>
         </div>
       </div>
@@ -469,18 +470,18 @@ const BoardingPass = ({ flight, font }) => (
 
     {/* Info Section */}
     <div className="p-8 pt-4 bg-gray-50/50">
-       <div className="grid grid-cols-3 gap-6 mb-2">
+       <div className="grid grid-cols-3 gap-2 mb-2"> {/* Reduced gap */}
          <div>
             <div className={`${font.xs} text-gray-400 mb-2 uppercase tracking-widest font-bold`}>Date</div>
-            <div className={`font-bold text-gray-800 ${font.xl} font-serif`}>{flight.date}</div>
+            <div className={`font-bold text-gray-800 ${font.lg} font-serif whitespace-nowrap`}>{flight.date}</div>
          </div>
          <div className="text-center"> 
             <div className={`${font.xs} text-gray-400 mb-2 uppercase tracking-widest font-bold`}>Departs</div>
-            <div className={`font-bold text-gray-800 ${font.xl} font-serif`}>{flight.dep}</div>
+            <div className={`font-bold text-gray-800 ${font.lg} font-serif`}>{flight.dep}</div>
          </div>
          <div className="text-right">
             <div className={`${font.xs} text-gray-400 mb-2 uppercase tracking-widest font-bold`}>Arrives</div>
-            <div className={`font-bold text-gray-800 ${font.xl} font-serif`}>{flight.arr}</div>
+            <div className={`font-bold text-gray-800 ${font.lg} font-serif`}>{flight.arr}</div>
          </div>
        </div>
     </div>
@@ -550,7 +551,7 @@ const HotelCard = ({ hotel, font }) => (
   </div>
 );
 
-const BookingTab = ({ font }) => (
+const BookingTab = ({ font, isLargeFont }) => (
   <div className="p-6 space-y-4 pb-32 animate-in fade-in duration-500">
      {/* Section Title */}
      <div className="mb-8 flex items-baseline gap-3">
@@ -559,7 +560,7 @@ const BookingTab = ({ font }) => (
      </div>
 
      {bookingData.flights.map((flight, idx) => (
-       <BoardingPass key={idx} flight={flight} font={font} />
+       <BoardingPass key={idx} flight={flight} font={font} isLargeFont={isLargeFont} />
      ))}
 
      <div className="h-6"></div> {/* Spacer */}
@@ -930,7 +931,7 @@ export default function BeijingTravelApp() {
   const [activeTab, setActiveTab] = useState('itinerary');
   const [selectedDay, setSelectedDay] = useState(1);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [isLargeFont, setIsLargeFont] = useState(true); // Default to Large (Senior Friendly)
+  const [isLargeFont, setIsLargeFont] = useState(false); // Default to Small (Compact)
 
   // Define dynamic font classes based on state
   const font = useMemo(() => isLargeFont ? {
@@ -942,19 +943,19 @@ export default function BeijingTravelApp() {
     '2xl': 'text-3xl',
     '3xl': 'text-4xl',
     '4xl': 'text-5xl',
-    '5xl': 'text-6xl',
+    '5xl': 'text-5xl', // Cap large font at 5xl for flight code
     '6xl': 'text-7xl',
   } : {
-    xs: 'text-xs',
-    sm: 'text-sm',
-    base: 'text-base',
-    lg: 'text-lg',
-    xl: 'text-xl',
-    '2xl': 'text-2xl',
-    '3xl': 'text-3xl',
-    '4xl': 'text-4xl',
-    '5xl': 'text-5xl',
-    '6xl': 'text-6xl',
+    xs: 'text-[10px]',
+    sm: 'text-xs',
+    base: 'text-sm',
+    lg: 'text-base',
+    xl: 'text-lg',
+    '2xl': 'text-xl',
+    '3xl': 'text-2xl',
+    '4xl': 'text-3xl',
+    '5xl': 'text-4xl',
+    '6xl': 'text-5xl',
   }, [isLargeFont]);
 
   const currentDayData = useMemo(() => 
@@ -1108,7 +1109,7 @@ export default function BeijingTravelApp() {
         )}
         
         {activeTab === 'dining' && <DiningTab font={font} />}
-        {activeTab === 'bookings' && <BookingTab font={font} />}
+        {activeTab === 'bookings' && <BookingTab font={font} isLargeFont={isLargeFont} />}
         {activeTab === 'expenses' && <ExpenseTracker font={font} />}
         {activeTab === 'info' && <InfoTab font={font} />}
       </main>
