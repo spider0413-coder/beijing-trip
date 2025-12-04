@@ -330,7 +330,7 @@ const DetailModal = ({ item, onClose, font }) => {
   
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-gray-900/20 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="bg-[#fcfcfc] w-full sm:w-[90%] sm:max-w-md h-[70vh] sm:h-auto sm:max-h-[70vh] rounded-t-[2.5rem] sm:rounded-[2rem] flex flex-col shadow-2xl relative overflow-hidden">
+      <div className="bg-[#fcfcfc] w-full sm:w-[90%] sm:max-w-md h-[90vh] sm:h-auto sm:max-h-[85vh] rounded-t-[2.5rem] sm:rounded-[2rem] flex flex-col shadow-2xl relative overflow-hidden">
         
         {/* Header - Minimalist with Flow */}
         <div className="pt-14 px-8 pb-6 relative shrink-0">
@@ -829,7 +829,7 @@ const ExpenseTracker = ({ font }) => {
             )}
             <button 
               onClick={handleSave}
-              className={`${editingId ? 'bg-red-700 hover:bg-red-800' : 'bg-gray-900 hover:bg-black'} text-white w-14 h-14 rounded-xl font-bold ${staticFont.base} transition-colors flex items-center justify-center shadow-md shrink-0`}
+              className={`${editingId ? 'bg-red-700 hover:bg-red-800' : 'bg-gray-900 hover:bg-black'} text-white w-12 h-12 rounded-xl font-bold ${staticFont.base} transition-colors flex items-center justify-center shadow-md shrink-0`}
             >
               {editingId ? <Save size={20} /> : <Plus size={24} />}
             </button>
